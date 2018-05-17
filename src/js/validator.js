@@ -43,7 +43,12 @@ class Validator{
         } else {
             this.errors.push("You must fill out the field");
         }
-        this.showErrors()
+
+        //this is a HACK
+        //putting it in a 0ms timeout just moves it to the end of the
+        //call stack, after any and all parent/child/grandchild
+        // of validate
+        setTimeout(this.showErrors.bind(this), 0)
     }
     
 
