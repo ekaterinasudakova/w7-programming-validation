@@ -8,28 +8,57 @@ class Validator{
             return false
         }
 
+        //make element to show the errors in
+        this.$errorContainer = document.createElement('div');
+        this.$errorContainer.classList.add('error-message');
+        this.$field.parentElement.appendChild(this.$errorContainer);
+
+
+        //keep track of errors
+        this.errors = [];
+
         //add event listener to call this.validate
         //but overrule its _this_ logic, and force its
         //_this_ to be the Validate class instance
 
-        //this gets redefined every thime you have timeout, addevent, and ajax
+        //this gets redefined every thime you have timeout, addevent, and ajax, foreach
         this.$field.addEventListener(`keyup`, this.validate.bind(this))
         this.$field.addEventListener(`blur`, this.validate.bind(this))
     }
 
     //this is how you make function or method inside a class
+
+
+    //RULES
     validate(){
         console.log(`validate!!!`,this.$field.value)
         //not selector bc that's just the string w the []
+
+        this.errors = [];
        
         //strings are truthy if they have something in them and falsy if they don't
         //so this validates that it's a string
         if(this.$field.value){
-            this.$field.style.borderColor = `green`;
+            //do nothing
         } else {
-            this.$field.style.borderColor = `red`;
-            this.$field.style.borderSize = `.2em`;
+            this.errors.push("You must fill out the field");
         }
-        
+        this.showErrors()
     }
+    
+
+        //STYLING
+        showErrors(){
+            if(this.errors.length){
+                this.$field.style.borderColor = `red`;
+                this.$errorContainer.innerHTML = "";
+                this.errors.forEach((error)=>{
+                    this.$errorContainer.innerHTML += '<p>' + error + '</p>';
+                }) 
+            } else {
+                this.$field.style.borderColor = `green`;
+                this.$errorContainer.innerHTML = "";
+            }
+        }
+
 }
